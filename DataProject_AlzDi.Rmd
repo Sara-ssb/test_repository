@@ -1,0 +1,158 @@
+---
+title: "Alzheimer's Disease and Healthy Aging Data"
+author: "Sara Sotelo"
+date: "2024-07-29"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+```{r}
+Alzheimers_aging <- read_csv(file = "C:/Users/SaraS/Downloads/Alzheimer_s_Disease_and_Healthy_Aging_Data_20240729.csv")
+#Data downloaded from https://data.cdc.gov/Healthy-Aging/Alzheimer-s-Disease-and-Healthy-Aging-Data/hfr9-rurv/about_data
+```
+
+
+```{r}
+#Getting rid of unnecessary columns 
+
+Alzheimers_aging <- Alzheimers_aging %>% select(- c(DataValueTypeID, Data_Value_Unit, StratificationCategory1, Stratification1, Data_Value_Footnote_Symbol, Data_Value_Footnote, LocationDesc, StratificationCategoryID2, ClassID, TopicID, QuestionID, LocationID, StratificationCategoryID1, RowId, Data_Value_Alt, Data_Value_Type, StratificationID2))
+```
+
+
+
+```{r}
+#Filtering out the type of rows of data I need
+
+Alzheimers_aging <- Alzheimers_aging %>% filter(Question == "Percentage of older adults who are eating 3 or more vegetables daily")
+Alzheimers_aging <- Alzheimers_aging %>% filter(StratificationCategory2 == "Race/Ethnicity")
+```
+
+
+```{r}
+#Getting rid of a column I don't need anymore
+Alzheimers_aging <- Alzheimers_aging %>% select(- StratificationCategory2)
+
+#Renaming columns
+Alzheimers_aging <- rename(Alzheimers_aging, AGE = StratificationID1, Percentage = Data_Value, `Race/Ethnicity` = Stratification2)
+```
+
+
+```{r}
+#Getting rid of na rows with using the Percentage column
+Alzheimers_aging <- drop_na(Alzheimers_aging, "Percentage")
+
+#Changing names of values in the AGE column to make more sense in a  chart
+Alzheimers_aging <- mutate(Alzheimers_aging, AGE = case_when(AGE == "5064" ~ "50-64", AGE == "65PLUS" ~ "65+", AGE == "AGE_OVERALL" ~ "All Ages"))
+```
+
+
+```{r}
+#Filtering the LocationAbbr column get the rows of data I needed of each region and assign it as a new data frame 
+
+West_Region <- Alzheimers_aging %>% filter(LocationAbbr %in% c("AK", "AZ", "CA", "CO", "HI", "NV", "NM", "OR", "UT", "WA", "WY"))
+
+Midwest_Region <- Alzheimers_aging %>% filter(LocationAbbr %in% c("IL", "IN", "IA", "KS", "MI", "MN", "MO", "NE", "ND", "OH", "SD", "WI"))
+
+South_Region <- Alzheimers_aging %>% filter(LocationAbbr %in% c("AL", "AR", "DE", "FL", "GA", "KY", "LA", "MD", "MS", "NC", "OK", "SC", "TN", "TX", "VA", "WV"))
+
+North_East_Region <- Alzheimers_aging %>% filter(LocationAbbr %in% c("CT", "ME", "MA", "NH", "NJ", "NY", "PA", "RI", "VT"))
+```
+
+
+
+```{r}
+#Make a column for each region? NAH
+
+```
+
+
+
+
+```{r}
+#library(esquisse)
+#esquisser(Midwest_Region)
+#Chart of Midwest Region made with esquisse
+
+ggplot(Midwest_Region) +
+  aes(x = Percentage, y = AGE, colour = `Race/Ethnicity`) +
+  geom_boxplot(fill = "#919190") +
+  scale_color_hue(direction = 1) +
+  labs(title = "Midwest Region", subtitle = "People who ate three or more vegetables daily") +
+  theme_linedraw() +
+  theme(
+    plot.title = element_text(size = 18L,
+    face = "bold"),
+    plot.subtitle = element_text(size = 12L),
+    legend.text = element_text(size = 13L),
+    legend.title = element_text(face = "bold",
+    size = 15L)
+  ) +
+  xlim(0, 40)
+
+```
+
+
+
+```{r}
+#Chart of North East Region made by copy & paste and change the data frame and name of title
+ggplot(North_East_Region) +
+  aes(x = Percentage, y = AGE, colour = `Race/Ethnicity`) +
+  geom_boxplot(fill = "#919190") +
+  scale_color_hue(direction = 1) +
+  labs(title = "North East Region", subtitle = "People who ate three or more vegetables daily") +
+  theme_linedraw() +
+  theme(
+    plot.title = element_text(size = 18L,
+    face = "bold"),
+    plot.subtitle = element_text(size = 12L),
+    legend.text = element_text(size = 13L),
+    legend.title = element_text(face = "bold",
+    size = 15L)
+  ) +
+  xlim(0, 40)
+```
+
+
+
+```{r}
+#Chart of South Region made by copy & paste and change the data frame and name of title
+ggplot(South_Region) +
+  aes(x = Percentage, y = AGE, colour = `Race/Ethnicity`) +
+  geom_boxplot(fill = "#919190") +
+  scale_color_hue(direction = 1) +
+  labs(title = "South Region", subtitle = "People who ate three or more vegetables daily") +
+  theme_linedraw() +
+  theme(
+    plot.title = element_text(size = 18L,
+    face = "bold"),
+    plot.subtitle = element_text(size = 12L),
+    legend.text = element_text(size = 13L),
+    legend.title = element_text(face = "bold",
+    size = 15L)
+  ) +
+  xlim(0, 40)
+```
+
+
+
+```{r}
+#Chart of West Region made by copy & paste and change the data frame and name of title
+ggplot(West_Region) +
+  aes(x = Percentage, y = AGE, colour = `Race/Ethnicity`) +
+  geom_boxplot(fill = "#919190") +
+  scale_color_hue(direction = 1) +
+  labs(title = "West Region", subtitle = "People who ate three or more vegetables daily") +
+  theme_linedraw() +
+  theme(
+    plot.title = element_text(size = 18L,
+    face = "bold"),
+    plot.subtitle = element_text(size = 12L),
+    legend.text = element_text(size = 13L),
+    legend.title = element_text(face = "bold",
+    size = 15L)
+  ) +
+  xlim(0, 40)
+```
+
