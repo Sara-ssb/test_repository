@@ -162,6 +162,7 @@ ggplot(West_Region) +
 
 
 ```{r}
+#Made an extra chart it just shows the US percentage as a whole and used facet_wrap with the AGE column!
 ggplot(Alzheimers_aging) +
   aes(x = Percentage, y = `Race/Ethnicity`) +
   geom_boxplot(fill = "#919190") +
