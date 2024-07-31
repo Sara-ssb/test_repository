@@ -2,7 +2,10 @@
 title: "Alzheimer's Disease and Healthy Aging Data"
 author: "Sara Sotelo"
 date: "2024-07-29"
-output: html_document
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r}
@@ -159,6 +162,21 @@ ggplot(West_Region) +
 
 
 ```{r}
-#HERE IS THE CHANGE!!
+ggplot(Alzheimers_aging) +
+  aes(x = Percentage, y = `Race/Ethnicity`) +
+  geom_boxplot(fill = "#919190") +
+  scale_color_hue(direction = 1) +
+  labs(title = "USA", subtitle = "People who ate three or more vegetables daily") +
+  theme_linedraw() +
+  theme(
+    plot.title = element_text(size = 18L,
+    face = "bold"),
+    plot.subtitle = element_text(size = 12L),
+    legend.text = element_text(size = 13L),
+    legend.title = element_text(face = "bold",
+    size = 15L)
+  ) +
+  xlim(0, 40) +
+  facet_wrap("AGE")
 ```
 
